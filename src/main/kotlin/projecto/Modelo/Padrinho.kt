@@ -4,5 +4,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-
-class Padrinho(override var nome: String, override var posto: String, override var idade: Int) : Mafioso(nome, posto, idade)
+@SerialName("Padrinho")
+class Padrinho : Mafioso( ){
+    override  var nome: String = "a"
+    override var posto: String = "b"
+    override var idade: String = "2"
+    override var familia : String = "s"
+}
