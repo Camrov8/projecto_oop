@@ -7,11 +7,10 @@ import kotlinx.serialization.json.Json
 
 
 @Serializable
-@Polymorphic
-sealed  class Mafioso(  ){
-   open var nome: String = ""
-   open var posto: String = ""
-   open var idade: String = ""
-   open var familia: String = ""
+
+open class Mafioso( open var nome: String,open var posto: String,open var idade: String,open var familia: String ){
+
+
+
 }
 

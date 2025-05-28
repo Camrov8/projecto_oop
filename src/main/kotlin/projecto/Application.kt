@@ -18,7 +18,7 @@ fun main() {
                 val file = File("src/main/resources/html/index2.html")
                 call.respondFile(file)
             }
-            get("/Adicionar") {
+            get("/form") {
                 // Caminho absoluto ou relativo do arquivo
                 val file = File("src/main/resources/html/Adicionar.html")
                 call.respondFile(file)
@@ -31,18 +31,30 @@ fun main() {
                 val idade = params["idade"]?.toIntOrNull() ?: 0
 
 
+                val mafioso = Mafioso(nome, posto, familia, idade.toString())
+                //Ler o ficheiro e guardar o conteudo numa var Mafioso[]
+                //adicionar a essa array o meu mafioso
+                //transformar a array em JSON
+                //escrever a array no ficheiro
 
-                val mafioso = Mafioso(nome,posto,familia, idade.toString())
+                val mafia =
+                    File("src/main/kotlin/projecto/Modelo/mafioso.json").readText()
+
+                var ler: MutableList<Mafioso> = Json.decodeFromString(mafia)
+                ler.add(mafioso)
 
 
                 call.respondText("Mafioso criado:  ${mafioso.nome}\nPosto: ${mafioso.posto}\nIdade: ${mafioso.idade}")
 
 // Serializa para JSON
                 val json = Json { prettyPrint = true } // mais legível
-                val jsonString = json.encodeToString(mafioso)
+                val jsonString = json.encodeToString(ler)
+
 
 // Salva no arquivo
-                File("kotlin/projecto/Modelo/mafioso.json").writeText(jsonString)
+                File("src/main/kotlin/projecto/Modelo/mafioso.json").writeText(
+                    jsonString
+                )
             }
         }
     }.start(wait = true)
