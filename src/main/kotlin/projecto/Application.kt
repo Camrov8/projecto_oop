@@ -1,6 +1,7 @@
 package com.example.teste
 
 import com.example.projecto.Modelo.Mafioso
+import io.ktor.http.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.request.*
@@ -13,17 +14,47 @@ import java.io.File
 fun main() {
     embeddedServer(Netty, port = 8080) {
         routing {
-            get("/1") {
+            routing {
+                get("/background") {
+                    val file = File("src/main/resources/img/background.jpg")
+                    if (file.exists()) {
+                        call.respondFile(file)
+                    } else {
+                        call.respond(HttpStatusCode.NotFound, "Imagem não encontrada")
+                    }
+                }
+            }
+
+            get("/") {
                 // Caminho absoluto ou relativo do arquivo
-                val file = File("src/main/resources/html/index2.html")
+                val file = File("src/main/resources/html/Home.html")
                 call.respondFile(file)
+                println("a")
             }
             get("/form") {
                 // Caminho absoluto ou relativo do arquivo
                 val file = File("src/main/resources/html/Adicionar.html")
                 call.respondFile(file)
+                println("a")
             }
+            get("/sucesso"){
+                val htmlContent = """
+        <!DOCTYPE html>
+        <html>
+        <head><title>Sucesso</title></head>
+        <body>
+            <h1>Mafioso criado com sucesso!</h1>
+            <button onclick="window.location.href='/form'">Voltar ao Formulário</button>
+        </body>
+        </html>
+    """.trimIndent()
+
+                call.respondText(htmlContent, ContentType.Text.Html)
+                }
+
+
             post("/Adicionar") {
+                println("a")
                 val params = call.receiveParameters()
                 val nome = params["nome"] ?: ""
                 val posto = params["posto"] ?: ""
@@ -44,7 +75,8 @@ fun main() {
                 ler.add(mafioso)
 
 
-                call.respondText("Mafioso criado:  ${mafioso.nome}\nPosto: ${mafioso.posto}\nIdade: ${mafioso.idade}")
+                //call.respondText("Mafioso criado:  ${mafioso.nome}\nPosto: ${mafioso.posto}\nIdade: ${mafioso.idade}")
+                call.respondRedirect("/sucesso")
 
 // Serializa para JSON
                 val json = Json { prettyPrint = true } // mais legível

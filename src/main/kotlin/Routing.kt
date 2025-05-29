@@ -11,14 +11,17 @@ import io.ktor.server.routing.*
 import io.ktor.server.thymeleaf.Thymeleaf
 import io.ktor.server.thymeleaf.ThymeleafContent
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver
+import java.io.File
 
 fun Application.configureRouting() {
     routing {
-        get("/") {
-            call.respondText("Hello World!")
-        }
-        
+
+
         // Static plugin. Try to access `/static/index.html`
-        staticResources("/static", "static")
+        staticResources("/", "static") {
+            enableAutoHeadResponse()
+            // suas outras rotas aqui...
+
+        }
     }
 }
